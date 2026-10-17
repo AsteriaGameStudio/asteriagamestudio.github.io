@@ -11,7 +11,7 @@ Actualmente, la web aloja la [política de privacidad de SkullMerge](https://ast
 ### Proyectos del estudio
 
 - **SkullMerge:** videojuego en proceso de acceso a producción de Google Play.
-- **Aprende tomando decisiones:** aplicación educativa en desarrollo.
+- **Viae:** aplicación educativa en desarrollo.
 - **Entrenamiento y agenda:** ideas para futuras aplicaciones; todavía no están en desarrollo.
 
 ### Contenido del repositorio
@@ -30,7 +30,7 @@ The website currently hosts the [SkullMerge privacy policy](https://asteriagames
 ### Studio projects
 
 - **SkullMerge:** a video game in the process of obtaining production access on Google Play.
-- **Aprende tomando decisiones:** an educational app in development.
+- **Viae:** an educational app in development.
 - **Training and planner apps:** ideas for future applications; development has not started.
 
 ### Repository contents
