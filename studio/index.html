@@ -1,0 +1,288 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Asteria Game Studio</title>
+  <meta name="description" content="Asteria Game Studio: estudio independiente de videojuegos y aplicaciones. Independent studio making games and apps.">
+  <meta property="og:title" content="Asteria Game Studio">
+  <meta property="og:description" content="Estudio independiente de videojuegos y aplicaciones. Independent studio making games and apps.">
+  <meta name="theme-color" content="#151b42">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%231a1f4b'/%3E%3Cpath d='M16 5l2.6 8.4L27 16l-8.4 2.6L16 27l-2.6-8.4L5 16l8.4-2.6z' fill='%23f5b800'/%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;600;800&family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --sky: #151b42;
+      --paper: #1f2758;
+      --ink: #eef1fb;
+      --soft: #aab3d8;
+      --line: #5d69a6;
+      --star: #f5b800;
+      --display: "Unbounded", "Arial Black", sans-serif;
+      --text: "Atkinson Hyperlegible", system-ui, sans-serif;
+    }
+    * { box-sizing: border-box; }
+    html { -webkit-text-size-adjust: 100%; color-scheme: dark; }
+    body {
+      margin: 0; color: var(--ink);
+      background: radial-gradient(120% 80% at 75% 0%, #232c66 0, var(--sky) 60%) var(--sky);
+      font: 1.0625rem/1.6 var(--text);
+    }
+    a { color: var(--ink); text-decoration-thickness: 1px; text-underline-offset: .2em; }
+    a:hover { text-decoration-thickness: 2px; }
+    :focus-visible { outline: 3px solid var(--star); outline-offset: 3px; border-radius: 4px; }
+    .wrap { width: min(1080px, calc(100% - 32px)); margin: 0 auto; }
+
+    /* top bar */
+    .top { display: flex; justify-content: space-between; align-items: center; padding: 20px 0; }
+    .studio { font: 600 .95rem/1 var(--display); letter-spacing: .01em; text-decoration: none; }
+    .lang { display: flex; border: 1.5px solid var(--ink); border-radius: 999px; overflow: hidden; }
+    .lang button {
+      appearance: none; border: 0; background: transparent; color: var(--ink);
+      font: 700 .85rem/1 var(--text); padding: 7px 13px; cursor: pointer;
+    }
+    .lang button[aria-pressed="true"] { background: var(--ink); color: var(--sky); }
+
+    /* hero: wordmark + sky map */
+    .hero { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 6fr); gap: 32px; align-items: center; padding: 40px 0 56px; }
+    h1 {
+      margin: 0; font: 800 clamp(3.2rem, 11vw, 7.2rem)/.9 var(--display);
+      letter-spacing: -.035em;
+    }
+    h1 small { display: block; margin-top: 14px; font: 400 clamp(1rem, 2.2vw, 1.25rem)/1.3 var(--display); letter-spacing: 0; color: var(--soft); }
+    .intro { max-width: 30em; margin: 28px 0 0; font-size: 1.15rem; }
+
+    .map { width: 100%; height: auto; display: block; overflow: visible; }
+    .map .link { stroke: var(--line); stroke-width: 1.5; fill: none; }
+    .map .link.future { stroke-dasharray: 3 6; }
+    .map .dust { fill: var(--line); }
+    .map .s { cursor: pointer; }
+    .map .s .shape { fill: var(--star); stroke: none; transition: transform .2s ease; transform-box: fill-box; transform-origin: center; }
+    .map .s.idea .shape { fill: var(--sky); stroke: var(--ink); stroke-width: 1.5; }
+    .map .s text { font: 600 15px var(--display); fill: var(--ink); }
+    .map .s text.sub { font: 400 13px var(--text); fill: var(--soft); }
+    .map .s:hover .shape, .map .s.on .shape, .map .s:focus-visible .shape { transform: scale(1.25); }
+    .map .s:focus-visible { outline: none; }
+    .map .s:focus-visible text:first-of-type { text-decoration: underline; }
+
+    /* catalogue */
+    .catalog { border-top: 1.5px solid var(--ink); padding: 40px 0 16px; }
+    h2 { margin: 0 0 6px; font: 600 1.6rem/1.2 var(--display); letter-spacing: -.01em; }
+    .legend { margin: 0 0 28px; color: var(--soft); display: flex; flex-wrap: wrap; gap: 6px 22px; }
+    .legend span { display: inline-flex; align-items: center; gap: 8px; }
+    .glyph { width: 18px; height: 18px; flex: none; }
+    .glyph path { stroke: var(--ink); stroke-width: 1.6; }
+    .glyph.full path { fill: var(--star); stroke: none; }
+    .glyph.hollow path { fill: transparent; }
+
+    .entries { list-style: none; margin: 0; padding: 0; }
+    .entry {
+      display: grid; grid-template-columns: 26px minmax(0, 15rem) minmax(0, 1fr); gap: 4px 18px;
+      padding: 22px 12px; margin: 0 -12px;
+      border-bottom: 1px solid rgba(238,241,251,.14);
+      transition: background-color .2s ease;
+    }
+    .entry:last-child { border-bottom: 0; }
+    .entry.on { background: var(--paper); }
+    .entry .glyph { margin-top: 6px; width: 22px; height: 22px; }
+    .entry h3 { margin: 0; font: 600 1.3rem/1.25 var(--display); }
+    .entry .kind { margin: 4px 0 0; color: var(--soft); }
+    .entry .body p { margin: 0; max-width: 36em; }
+    .entry .body p + p { margin-top: 8px; }
+    .entry.idea h3 { font-weight: 400; }
+
+    /* contact */
+    .contact { border-top: 1.5px solid var(--ink); padding: 40px 0; display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 6fr); gap: 32px; }
+    .contact p { margin: 0; color: var(--soft); max-width: 24em; }
+    .contact dl { margin: 0; display: grid; grid-template-columns: max-content minmax(0, 1fr); gap: 10px 22px; }
+    .contact dt { color: var(--soft); }
+    .contact dd { margin: 0; overflow-wrap: anywhere; font-weight: 700; }
+
+    footer { padding: 26px 0 40px; color: var(--soft); font-size: .92rem; }
+
+    [data-lang="en"] [lang="es"], [data-lang="es"] [lang="en"] { display: none; }
+
+    /* one load moment: the constellation draws itself */
+    @media (prefers-reduced-motion: no-preference) {
+      .map .link { stroke-dasharray: 600; stroke-dashoffset: 600; animation: draw 1.6s ease-out .2s forwards; }
+      .map .link.future { animation: none; stroke-dasharray: 3 6; stroke-dashoffset: 0; opacity: 0; animation: fade .8s ease 1.6s forwards; }
+      .map .s { opacity: 0; animation: fade .5s ease forwards; }
+      .map .s:nth-of-type(1) { animation-delay: .1s; }
+      .map .s:nth-of-type(2) { animation-delay: .6s; }
+      .map .s:nth-of-type(3) { animation-delay: 1.5s; }
+      .map .s:nth-of-type(4) { animation-delay: 1.8s; }
+    }
+    @keyframes draw { to { stroke-dashoffset: 0; } }
+    @keyframes fade { to { opacity: 1; } }
+
+    @media (max-width: 760px) {
+      .hero, .contact { grid-template-columns: 1fr; }
+      .hero { padding-top: 24px; gap: 8px; }
+      .entry { grid-template-columns: 24px minmax(0, 1fr); }
+      .entry .body { grid-column: 2; margin-top: 8px; }
+      .map .s text { font-size: 24px; }
+      .map .s text.sub { font-size: 20px; }
+    }
+  </style>
+</head>
+<body data-lang="es">
+  <div class="wrap">
+    <header class="top">
+      <a class="studio" href="./">Asteria Game Studio</a>
+      <div class="lang" role="group" aria-label="Idioma / Language">
+        <button type="button" data-set="es" aria-pressed="true">ES</button>
+        <button type="button" data-set="en" aria-pressed="false">EN</button>
+      </div>
+    </header>
+
+    <main>
+      <div class="hero">
+        <div>
+          <h1>Asteria<small lang="es">Game Studio</small><small lang="en">Game Studio</small></h1>
+          <p class="intro" lang="es">Un estudio independiente que hace videojuegos y aplicaciones. Cada proyecto es una estrella nueva en este mapa.</p>
+          <p class="intro" lang="en">An independent studio making games and apps. Every project is a new star on this map.</p>
+        </div>
+
+        <svg class="map" viewBox="0 0 560 420" role="group" aria-labelledby="map-title">
+          <title id="map-title">Mapa de proyectos / Project map</title>
+          <!-- background dust -->
+          <g aria-hidden="true">
+            <circle class="dust" cx="40" cy="60" r="1.6"/><circle class="dust" cx="120" cy="300" r="1.2"/>
+            <circle class="dust" cx="210" cy="40" r="1.4"/><circle class="dust" cx="300" cy="380" r="1.6"/>
+            <circle class="dust" cx="520" cy="210" r="1.3"/><circle class="dust" cx="470" cy="30" r="1.8"/>
+            <circle class="dust" cx="60" cy="200" r="1.1"/><circle class="dust" cx="400" cy="250" r="1.2"/>
+            <circle class="dust" cx="250" cy="200" r="1"/><circle class="dust" cx="545" cy="360" r="1.5"/>
+          </g>
+          <!-- constellation lines: solid between projects in development, dashed toward ideas -->
+          <path class="link" d="M110 130 L330 95"/>
+          <path class="link future" d="M330 95 L455 250"/>
+          <path class="link future" d="M110 130 L215 320"/>
+
+          <a class="s" href="#skullmerge" data-k="skullmerge">
+            <path class="shape" d="M110 106 l7 17 17 7 -17 7 -7 17 -7 -17 -17 -7 17 -7z"/>
+            <text x="80" y="182">SkullMerge</text>
+            <text class="sub" x="80" y="200" lang="es">juego</text><text class="sub" x="80" y="200" lang="en">game</text>
+          </a>
+          <a class="s" href="#viae" data-k="viae">
+            <path class="shape" d="M330 71 l7 17 17 7 -17 7 -7 17 -7 -17 -17 -7 17 -7z"/>
+            <text x="365" y="90">Viae</text>
+            <text class="sub" x="365" y="110" lang="es">app educativa</text><text class="sub" x="365" y="110" lang="en">educational app</text>
+          </a>
+          <a class="s idea" href="#entrenamiento" data-k="entrenamiento">
+            <path class="shape" d="M455 233 l5 12 12 5 -12 5 -5 12 -5 -12 -12 -5 12 -5z"/>
+            <text x="400" y="300" lang="es">Entrenamiento</text><text x="420" y="300" lang="en">Training</text>
+            <text class="sub" x="400" y="318" lang="es">idea</text><text class="sub" x="420" y="318" lang="en">idea</text>
+          </a>
+          <a class="s idea" href="#agenda" data-k="agenda">
+            <path class="shape" d="M215 303 l5 12 12 5 -12 5 -5 12 -5 -12 -12 -5 12 -5z"/>
+            <text x="245" y="324" lang="es">Agenda</text><text x="245" y="324" lang="en">Planner</text>
+            <text class="sub" x="245" y="342">idea</text>
+          </a>
+        </svg>
+      </div>
+
+      <section class="catalog" aria-labelledby="h-cat">
+        <h2 id="h-cat"><span lang="es">Proyectos</span><span lang="en">Projects</span></h2>
+        <p class="legend">
+          <span><svg class="glyph full" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l3 7 7 3-7 3-3 7-3-7-7-3 7-3z"/></svg><b lang="es" style="font-weight:400">En desarrollo</b><b lang="en" style="font-weight:400">In development</b></span>
+          <span><svg class="glyph hollow" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l3 7 7 3-7 3-3 7-3-7-7-3 7-3z"/></svg><b lang="es" style="font-weight:400">Idea, sin desarrollo ni fecha</b><b lang="en" style="font-weight:400">Idea, not started and no date</b></span>
+        </p>
+
+        <ul class="entries">
+          <li class="entry" id="skullmerge" data-k="skullmerge">
+            <svg class="glyph full" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l3 7 7 3-7 3-3 7-3-7-7-3 7-3z"/></svg>
+            <div>
+              <h3>SkullMerge</h3>
+              <p class="kind" lang="es">Juego para Android, hecho con Godot</p>
+              <p class="kind" lang="en">Android game, made with Godot</p>
+            </div>
+            <div class="body">
+              <p lang="es">Un juego de fusiones: combina piezas para que evolucionen y sigue avanzando. Está en prueba cerrada, camino de Google Play.</p>
+              <p lang="en">A merge game: combine pieces so they evolve and keep going. It's in closed testing on its way to Google Play.</p>
+              <p><a href="../skullmerge/privacy/"><span lang="es">Política de privacidad</span><span lang="en">Privacy policy</span></a></p>
+            </div>
+          </li>
+          <li class="entry" id="viae" data-k="viae">
+            <svg class="glyph full" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l3 7 7 3-7 3-3 7-3-7-7-3 7-3z"/></svg>
+            <div>
+              <h3>Viae</h3>
+              <p class="kind" lang="es">Aplicación educativa web</p>
+              <p class="kind" lang="en">Educational web app</p>
+            </div>
+            <div class="body">
+              <p lang="es">Aprende tomando decisiones dentro de una historia y viendo sus consecuencias. El primer caso trata sobre Derecho Espacial.</p>
+              <p lang="en">Learn by making decisions inside a story and seeing their consequences. The first case covers space law.</p>
+            </div>
+          </li>
+          <li class="entry idea" id="entrenamiento" data-k="entrenamiento">
+            <svg class="glyph hollow" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l3 7 7 3-7 3-3 7-3-7-7-3 7-3z"/></svg>
+            <div>
+              <h3 lang="es">Entrenamiento</h3><h3 lang="en">Training</h3>
+              <p class="kind">App</p>
+            </div>
+            <div class="body">
+              <p lang="es">Para apuntar ejercicios, series, repeticiones y pesos, y ver tu evolución.</p>
+              <p lang="en">For logging exercises, sets, reps and weights, and seeing your progress.</p>
+            </div>
+          </li>
+          <li class="entry idea" id="agenda" data-k="agenda">
+            <svg class="glyph hollow" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l3 7 7 3-7 3-3 7-3-7-7-3 7-3z"/></svg>
+            <div>
+              <h3 lang="es">Agenda</h3><h3 lang="en">Planner</h3>
+              <p class="kind">App</p>
+            </div>
+            <div class="body">
+              <p lang="es">Para organizar tareas y el día a día.</p>
+              <p lang="en">For organizing tasks and day-to-day life.</p>
+            </div>
+          </li>
+        </ul>
+      </section>
+
+      <section class="contact" aria-labelledby="h-contact">
+        <div>
+          <h2 id="h-contact"><span lang="es">Contacto</span><span lang="en">Contact</span></h2>
+          <p lang="es">Para preguntas sobre los proyectos, privacidad o colaboraciones.</p>
+          <p lang="en">For questions about the projects, privacy or collaborations.</p>
+        </div>
+        <dl>
+          <dt lang="es">Correo</dt><dt lang="en">Email</dt>
+          <dd><a href="mailto:asteriastudiodev@gmail.com">asteriastudiodev@gmail.com</a></dd>
+          <dt>GitHub</dt>
+          <dd><a href="https://github.com/AsteriaGameStudio">AsteriaGameStudio</a></dd>
+          <dt>Legal</dt>
+          <dd><a href="../skullmerge/privacy/"><span lang="es">Privacidad de SkullMerge</span><span lang="en">SkullMerge privacy</span></a></dd>
+        </dl>
+      </section>
+    </main>
+
+    <footer>© 2026 Asteria Game Studio</footer>
+  </div>
+  <script>
+    (function () {
+      var body = document.body, btns = document.querySelectorAll('.lang button');
+      function set(l) {
+        body.setAttribute('data-lang', l);
+        document.documentElement.lang = l;
+        btns.forEach(function (b) { b.setAttribute('aria-pressed', String(b.dataset.set === l)); });
+        try { localStorage.setItem('asteria-lang', l); } catch (e) {}
+      }
+      btns.forEach(function (b) { b.addEventListener('click', function () { set(b.dataset.set); }); });
+      var saved = null;
+      try { saved = localStorage.getItem('asteria-lang'); } catch (e) {}
+      if (saved === 'en' || saved === 'es') set(saved);
+      else if (/^en/i.test(navigator.language || '')) set('en');
+
+      // star on the map <-> entry in the list highlight each other
+      var all = document.querySelectorAll('[data-k]');
+      function mark(k, on) { all.forEach(function (el) { if (el.dataset.k === k) el.classList.toggle('on', on); }); }
+      all.forEach(function (el) {
+        ['mouseenter', 'focusin'].forEach(function (ev) { el.addEventListener(ev, function () { mark(el.dataset.k, true); }); });
+        ['mouseleave', 'focusout'].forEach(function (ev) { el.addEventListener(ev, function () { mark(el.dataset.k, false); }); });
+      });
+    })();
+  </script>
+</body>
+</html>
